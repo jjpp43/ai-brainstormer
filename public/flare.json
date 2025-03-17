@@ -1,0 +1,49 @@
+{
+    "name": "flare",
+    "children": [
+      {
+        "name": "display",
+        "children": [
+          {
+            "name": "DirtySprite",
+            "size": 8833
+          },
+          {
+            "name": "LineSprite",
+            "size": 1732
+          },
+          {
+            "name": "RectSprite",
+            "size": 3623
+          }
+        ]
+      },
+      {
+        "name": "flex",
+        "children": [
+          {
+            "name": "FlareVis",
+            "size": 4116
+          }
+        ]
+      },
+      {
+        "name": "physics",
+        "children": [
+          {
+            "name": "DragForce",
+            "size": 1082
+          },
+          {
+            "name": "GravityForce",
+            "size": 1336
+          },
+          {
+            "name": "Particle",
+            "size": 2822
+          }
+        ]
+      }
+      
+    ]
+  }
