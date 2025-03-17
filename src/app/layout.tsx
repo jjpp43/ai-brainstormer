@@ -34,7 +34,7 @@ export default function RootLayout({
             <SidebarTrigger className="h-10 w-10" />
             <main className=" flex w-full items-center justify-center">
               {children}
-              <DockWrapper />
+              {/* <DockWrapper /> */}
             </main>
           </SidebarProvider>
         </body>

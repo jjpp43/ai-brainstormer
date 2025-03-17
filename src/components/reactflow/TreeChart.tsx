@@ -2,7 +2,7 @@
 
 import * as d3 from "d3";
 import { useCallback, useEffect, useRef } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { ZoomIn, ZoomOut, Download } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -19,7 +19,7 @@ interface TreeChartProps {
 
 const TreeChart: React.FC<TreeChartProps> = ({
   data,
-  width = 1280,
+  width = 880,
   height = 600,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);

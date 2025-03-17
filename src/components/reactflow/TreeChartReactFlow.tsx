@@ -10,11 +10,13 @@ import ReactFlow, {
   MiniMap,
   Node,
   Edge,
+  useReactFlow,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { ZoomIn, ZoomOut, Download } from "lucide-react";
 import CustomNode from "./CustomNode"; // Adjust path if needed
+import BrainstormPrompt from "../BrainstormPrompt";
 
 // -------------------- Types --------------------
 
@@ -26,6 +28,8 @@ interface TreeNode {
 
 interface TreeChartProps {
   data: TreeNode;
+  onGenerate: (input: string) => void;
+  ideas: string | null;
 }
 
 const nodeTypes = {
@@ -34,27 +38,35 @@ const nodeTypes = {
 
 // ------------------ Main TreeChart ------------------
 
-const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
+const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
   const nodeIdSet = new Set<string>(); // Track created node IDs
-
+  const strokeColors = [
+    "#FF0072", // Pink
+    "#00BFFF", // Deep Sky Blue
+    "#32CD32", // Lime Green
+    "#FFA500", // Orange
+    "#8A2BE2", // Blue Violet
+    "#4262FF", // Orange Red
+  ];
   let idCounter = 0; // Unique incremental ID
 
   // Recursive function to convert TreeNode to Flow elements
-  // Recursive function to convert TreeNode to Flow elements
+  // Update the convertToFlow function with this positioning logic
   const convertToFlow = (
     node: TreeNode,
     x: number,
     y: number,
-    depth: number = 0, // Add depth parameter
-    parentId?: string
+    depth: number = 0,
+    parentId?: string,
+    strokeColor?: string
   ): { nodes: Node[]; edges: Edge[] } => {
-    const nodeId = `node-${idCounter++}`; // Global unique ID
+    const nodeId = `node-${idCounter++}`;
     const newNodes: Node[] = [];
     const newEdges: Edge[] = [];
+    console.log(parentId, idCounter);
 
-    // Only add node if not already created
     if (!nodeIdSet.has(nodeId)) {
       nodeIdSet.add(nodeId);
       newNodes.push({
@@ -63,12 +75,15 @@ const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
         data: {
           label: node.name,
           text: node.text,
+          positionType: x < 0 ? "left" : "right", // Add position type
         },
         position: { x, y },
       });
     }
-
-    // Create edge to parent if exists
+    if (parentId == "node-0") {
+      const parentIndex = Math.floor(idCounter / 4);
+      strokeColor = strokeColors[parentIndex];
+    }
     if (parentId) {
       newEdges.push({
         id: `${parentId}-${nodeId}`,
@@ -77,30 +92,44 @@ const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
         type: "beizer",
         style: {
           strokeWidth: 2,
-          stroke: "#FF0072",
+          stroke: strokeColor,
         },
       });
     }
 
-    // Recursively process children
     if (node.children) {
       const totalChildren = node.children.length;
-
-      // Dynamically adjust spacing based on depth
-      const verticalSpacing = depth === 0 ? 300 : 100; // More space for top-level parents
-      const horizontalSpacing = 200;
+      const verticalSpacing = depth === 0 ? 300 : 100;
+      const horizontalSpacing = depth === 0 ? 400 : 320;
 
       node.children.forEach((child, idx) => {
-        const isLeft = idx < totalChildren / 2;
-        const childX = x + horizontalSpacing * 2;
-        const childY = y + (idx - (totalChildren - 1) / 2) * verticalSpacing;
+        let childX = x;
+        let childY = y;
+
+        // First level children layout
+        if (depth === 0) {
+          const isLeft = idx < 3; // First 3 nodes on left
+          const groupIndex = idx % 3;
+          childX = isLeft ? x - horizontalSpacing : x + horizontalSpacing;
+          childY = y + (groupIndex - 1) * verticalSpacing;
+        }
+        // Child nodes layout
+        else {
+          const direction = x < 0 ? "left" : "right";
+          childX =
+            direction === "left"
+              ? x - horizontalSpacing
+              : x + horizontalSpacing;
+          childY = y + (idx - (totalChildren - 1) / 2) * verticalSpacing;
+        }
 
         const { nodes: childNodes, edges: childEdges } = convertToFlow(
           child,
           childX,
           childY,
-          depth + 1, // Increase depth for children
-          nodeId // Pass current node as parent
+          depth + 1,
+          nodeId,
+          strokeColor
         );
 
         newNodes.push(...childNodes);
@@ -111,17 +140,19 @@ const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
     return { nodes: newNodes, edges: newEdges };
   };
 
-  // Call convertToFlow inside useEffect
+  // Update the initial call in useEffect
   useEffect(() => {
     if (!data) return;
-    nodeIdSet.clear(); // Clear ID tracker before generating
-    idCounter = 0; // Reset ID counter
+    nodeIdSet.clear();
+    idCounter = 0;
+
+    // Start root node at center position (0,0)
     const { nodes: flowNodes, edges: flowEdges } = convertToFlow(data, 0, 0);
+
     setNodes(flowNodes);
     setEdges(flowEdges);
   }, [data, setNodes, setEdges]);
 
-  // Handle user connections
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -140,12 +171,15 @@ const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
       >
         <MiniMap />
         <Controls />
-        <Background />
+        <Background size={1} />
       </ReactFlow>
 
-      {/* Optional Zoom/Download */}
-      <div className="absolute top-4 right-4 flex space-x-2">
-        <Button onClick={() => console.log("Zoom In")}>
+      <div className="absolute top-2 left-4 flex space-x-2">
+        <BrainstormPrompt onGenerate={onGenerate} ideas={ideas} />
+      </div>
+
+      <div className="absolute top-2 right-2 flex space-x-2">
+        <Button>
           <ZoomIn />
         </Button>
         <Button onClick={() => console.log("Zoom Out")}>
@@ -153,7 +187,7 @@ const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
         </Button>
       </div>
 
-      <div className="absolute bottom-4 right-4 flex space-x-2">
+      <div className="absolute bottom-2 right-2 flex space-x-2">
         <Button onClick={() => console.log("Download JPG")}>
           JPG <Download />
         </Button>
