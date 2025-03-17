@@ -3,43 +3,122 @@
     "children": [
       {
         "name": "display",
+        "text":"this is a short description",
         "children": [
           {
             "name": "DirtySprite",
+            "text":"this is a short description",
             "size": 8833
           },
           {
             "name": "LineSprite",
+            "text":"this is a short description",
             "size": 1732
           },
           {
             "name": "RectSprite",
+            "text":"this is a short description",
             "size": 3623
           }
         ]
       },
       {
         "name": "flex",
+        "text":"this is a short description",
         "children": [
           {
             "name": "FlareVis",
+            "text":"this is a short description",
+            "size": 4116
+          },{
+            "name": "FlareVis",
+            "text":"this is a short description",
+            "size": 4116
+          },{
+            "name": "FlareVis",
+            "text":"this is a short description",
             "size": 4116
           }
         ]
       },
       {
         "name": "physics",
+        "text":"this is a short description",
         "children": [
           {
             "name": "DragForce",
+            "text":"this is a short description",
             "size": 1082
           },
           {
             "name": "GravityForce",
+            "text":"this is a short description",
             "size": 1336
           },
           {
             "name": "Particle",
+            "text":"this is a short description",
+            "size": 2822
+          }
+        ]
+      },
+      {
+        "name": "display",
+        "text":"this is a short description",
+        "children": [
+          {
+            "name": "DirtySprite",
+            "text":"this is a short description",
+            "size": 8833
+          },
+          {
+            "name": "LineSprite",
+            "text":"this is a short description",
+            "size": 1732
+          },
+          {
+            "name": "RectSprite",
+            "text":"this is a short description",
+            "size": 3623
+          }
+        ]
+      },
+      {
+        "name": "flex",
+        "text":"this is a short description",
+        "children": [
+          {
+            "name": "FlareVis",
+            "text":"this is a short description",
+            "size": 4116
+          },{
+            "name": "FlareVis",
+            "text":"this is a short description",
+            "size": 4116
+          },{
+            "name": "FlareVis",
+            "text":"this is a short description",
+            "size": 4116
+          }
+        ]
+      },
+      {
+        "name": "physics",
+        "text":"this is a short description",
+        "children": [
+          {
+            "name": "DragForce",
+            "text":"this is a short description",
+            "size": 1082
+          },
+          {
+            "name": "GravityForce",
+            "text":"this is a short description",
+            "size": 1336
+          },
+          {
+            "name": "Particle",
+            "text":"this is a short description",
             "size": 2822
           }
         ]
