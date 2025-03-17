@@ -12,8 +12,8 @@ const CustomNode = ({ data }: any) => {
       />
       {/* Node content */}
       <div>
-        <div>{data.label}</div>
-        <div>{data.text}</div>
+        <div className="text-xl font-semibold">{data.label}</div>
+        <div className="text-lg">{data.text}</div>
       </div>
       {/* Right connection handle */}
       <Handle

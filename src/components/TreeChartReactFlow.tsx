@@ -42,10 +42,12 @@ const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
   let idCounter = 0; // Unique incremental ID
 
   // Recursive function to convert TreeNode to Flow elements
+  // Recursive function to convert TreeNode to Flow elements
   const convertToFlow = (
     node: TreeNode,
     x: number,
     y: number,
+    depth: number = 0, // Add depth parameter
     parentId?: string
   ): { nodes: Node[]; edges: Edge[] } => {
     const nodeId = `node-${idCounter++}`; // Global unique ID
@@ -58,7 +60,10 @@ const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
       newNodes.push({
         id: nodeId,
         type: "custom",
-        data: { label: node.name, text: node.text },
+        data: {
+          label: node.name,
+          text: node.text,
+        },
         position: { x, y },
       });
     }
@@ -80,17 +85,21 @@ const TreeChart: React.FC<TreeChartProps> = ({ data }) => {
     // Recursively process children
     if (node.children) {
       const totalChildren = node.children.length;
-      const verticalSpacing = 160; // Adjust spacing
-      const horizontalSpacing = 250;
+
+      // Dynamically adjust spacing based on depth
+      const verticalSpacing = depth === 0 ? 300 : 100; // More space for top-level parents
+      const horizontalSpacing = 200;
 
       node.children.forEach((child, idx) => {
-        const childX = x + horizontalSpacing;
+        const isLeft = idx < totalChildren / 2;
+        const childX = x + horizontalSpacing * 2;
         const childY = y + (idx - (totalChildren - 1) / 2) * verticalSpacing;
 
         const { nodes: childNodes, edges: childEdges } = convertToFlow(
           child,
           childX,
           childY,
+          depth + 1, // Increase depth for children
           nodeId // Pass current node as parent
         );
 
