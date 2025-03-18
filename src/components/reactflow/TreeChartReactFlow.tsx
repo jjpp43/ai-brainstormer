@@ -65,8 +65,10 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
     const nodeId = `node-${idCounter++}`;
     const newNodes: Node[] = [];
     const newEdges: Edge[] = [];
-    console.log(parentId, idCounter);
-
+    if (parentId == "node-0" || depth === 0) {
+      const parentIndex = Math.floor(idCounter / 4);
+      strokeColor = strokeColors[parentIndex];
+    }
     if (!nodeIdSet.has(nodeId)) {
       nodeIdSet.add(nodeId);
       newNodes.push({
@@ -76,14 +78,12 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
           label: node.name,
           text: node.text,
           positionType: x < 0 ? "left" : "right", // Add position type
+          strokeColor,
         },
         position: { x, y },
       });
     }
-    if (parentId == "node-0") {
-      const parentIndex = Math.floor(idCounter / 4);
-      strokeColor = strokeColors[parentIndex];
-    }
+
     if (parentId) {
       newEdges.push({
         id: `${parentId}-${nodeId}`,
@@ -96,10 +96,12 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
         },
       });
     }
+    //Debugging
+    console.log(parentId, idCounter);
 
     if (node.children) {
       const totalChildren = node.children.length;
-      const verticalSpacing = depth === 0 ? 300 : 100;
+      const verticalSpacing = depth === 0 ? 320 : 100;
       const horizontalSpacing = depth === 0 ? 400 : 320;
 
       node.children.forEach((child, idx) => {
@@ -167,6 +169,8 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        snapToGrid={true} // Enable snapping
+        snapGrid={[20, 20]}
         fitView
       >
         <MiniMap />

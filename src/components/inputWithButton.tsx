@@ -28,7 +28,7 @@ export function InputWithButton({
   return (
     <div className="flex w-full items-end space-x-2">
       <Input
-        className="w-full"
+        className="w-full bg-white border-slate-400 border-1"
         placeholder={placeholder}
         value={input} // Bind input state
         onChange={(e) => setInput(e.target.value)}

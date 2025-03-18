@@ -1,63 +1,69 @@
-// CustomNode.tsx
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Handle, Position } from "reactflow";
 
-const CustomNode = ({ data, counter }: any) => {
+const CustomNode = ({ data }: any) => {
   const isLeftNode = data.positionType === "left";
   const isRoot = data.isRoot;
+  const colorClass = data.strokeColor || "black";
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  // Function to auto-resize textarea
+  const autoResize = (element: HTMLTextAreaElement | null) => {
+    if (element) {
+      element.style.height = "auto"; // Reset height to recalculate
+      element.style.height = `${element.scrollHeight}px`; // Set to scroll height
+    }
+  };
+
+  useEffect(() => {
+    autoResize(textAreaRef.current);
+  }, []);
+
   return (
-    <div className="bg-white border border-gray-400 rounded-lg shadow-md px-4 py-2 min-w-[120px] text-center relative">
+    <div
+      style={{ borderColor: colorClass }}
+      className="h-fit bg-white border-2 rounded-lg shadow-md px-4 py-2 min-w-[120px] text-center relative"
+    >
       {/* Target handle (where connections come in) */}
       <Handle
         type="target"
-        position={
-          isRoot ? Position.Top : isLeftNode ? Position.Right : Position.Left
-        }
-        style={{ background: "#555", width: 10, height: 10 }}
+        position={isLeftNode ? Position.Right : Position.Left}
+        style={{ background: "#555", width: 0, height: 0 }}
       />
       {/* Node content */}
       <div className="flex flex-col">
-        <input
-          defaultValue={data.label}
-          className="text-xl font-semibold"
-        ></input>
-        <input
+        <input defaultValue={data.label} className="text-xl font-semibold" />
+        <textarea
+          ref={textAreaRef}
           defaultValue={data.text}
-          className="text-lg overflow-auto whitespace-nowrap w-full"
-        ></input>
+          className="text-lg w-full resize-none overflow-hidden"
+          style={{ minHeight: "1.5em" }} // Ensure single line initially
+          onInput={(e) => autoResize(e.currentTarget)}
+          rows={1} // Starts with one line
+        />
       </div>
 
       {/* Source handles (where connections go out) */}
       {isRoot ? (
-        // Root node has both handles
         <>
           <Handle
+            id="left" // Add ID for left handle
             type="source"
             position={Position.Left}
-            id="left"
-            style={{ background: "#555", width: 10, height: 10 }}
+            style={{ background: "#555", width: 0, height: 0 }}
           />
           <Handle
+            id="right" // Add ID for right handle
             type="source"
             position={Position.Right}
-            id="right"
-            style={{ background: "#555", width: 10, height: 10 }}
+            style={{ background: "#555", width: 0, height: 0 }}
           />
         </>
       ) : (
-        // Child nodes have opposite handles
-        <>
-          <Handle
-            type="source"
-            position={isLeftNode ? Position.Left : Position.Right}
-            style={{ background: "#555", width: 10, height: 10 }}
-          />
-          <Handle
-            type="source"
-            position={isLeftNode ? Position.Right : Position.Left}
-            style={{ display: "none" }} // Hidden secondary handle for connection flexibility
-          />
-        </>
+        <Handle
+          type="source"
+          position={isLeftNode ? Position.Left : Position.Right}
+          style={{ background: "#555", width: 0, height: 0 }}
+        />
       )}
     </div>
   );
