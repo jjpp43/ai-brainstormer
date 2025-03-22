@@ -11,12 +11,15 @@ import ReactFlow, {
   Node,
   Edge,
   useReactFlow,
+  ControlButton,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { Button } from "../ui/button";
-import { ZoomIn, ZoomOut, Download } from "lucide-react";
+import { ZoomIn, ZoomOut, ArrowDownToLine, ArrowDown } from "lucide-react";
 import CustomNode from "./CustomNode"; // Adjust path if needed
 import BrainstormPrompt from "../BrainstormPrompt";
+import * as htmlToImage from "html-to-image";
+import { Arrow } from "@radix-ui/react-tooltip";
 
 // -------------------- Types --------------------
 
@@ -37,6 +40,22 @@ const nodeTypes = {
 };
 
 // ------------------ Main TreeChart ------------------
+const downloadPNG = async () => {
+  const reactFlowWrapper = document.querySelector(
+    ".react-flow__viewport"
+  ) as HTMLElement;
+  if (!reactFlowWrapper) return;
+
+  try {
+    const dataUrl = await htmlToImage.toPng(reactFlowWrapper);
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "tree_chart.png";
+    link.click();
+  } catch (error) {
+    console.error("Error generating PNG:", error);
+  }
+};
 
 const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
@@ -65,6 +84,8 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
     const nodeId = `node-${idCounter++}`;
     const newNodes: Node[] = [];
     const newEdges: Edge[] = [];
+    const isRoot = depth === 0;
+
     if (parentId == "node-0" || depth === 0) {
       const parentIndex = Math.floor(idCounter / 4);
       strokeColor = strokeColors[parentIndex];
@@ -79,25 +100,38 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
           text: node.text,
           positionType: x < 0 ? "left" : "right", // Add position type
           strokeColor,
+          isRoot,
         },
         position: { x, y },
       });
     }
 
     if (parentId) {
+      const handleId =
+        parentId === "node-0" ? (idCounter < 11 ? "left" : "right") : undefined;
+
       newEdges.push({
         id: `${parentId}-${nodeId}`,
         source: parentId,
         target: nodeId,
-        type: "beizer",
+        type: "bezier",
+        sourceHandle: handleId, // Use left or right handle based on ID
         style: {
           strokeWidth: 2,
           stroke: strokeColor,
         },
       });
     }
+
     //Debugging
-    console.log(parentId, idCounter);
+    console.log(
+      "ParentID: ",
+      parentId,
+      "NodeID: ",
+      idCounter,
+      "Title: ",
+      node.name
+    );
 
     if (node.children) {
       const totalChildren = node.children.length;
@@ -174,7 +208,17 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
         fitView
       >
         <MiniMap />
-        <Controls />
+        <Controls
+          className=""
+          aria-label="React Flow Control Panel"
+          showZoom={true}
+          showInteractive={false}
+        >
+          <ControlButton>
+            <ArrowDownToLine strokeWidth={2.5} />
+          </ControlButton>
+        </Controls>
+
         <Background size={1} />
       </ReactFlow>
 
@@ -192,8 +236,8 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
       </div>
 
       <div className="absolute bottom-2 right-2 flex space-x-2">
-        <Button onClick={() => console.log("Download JPG")}>
-          JPG <Download />
+        <Button onClick={downloadPNG}>
+          JPG <ArrowDownToLine />
         </Button>
       </div>
     </div>

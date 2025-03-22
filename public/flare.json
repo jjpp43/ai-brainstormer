@@ -2,28 +2,28 @@
     "name": "flare",
     "children": [
       {
-        "name": "display",
+        "name": "A",
         "text":"this is a short description",
         "children": [
           {
-            "name": "DirtySprite",
+            "name": "DirtySpr",
             "text":"this is a short description",
             "size": 8833
           },
           {
-            "name": "LineSprite",
+            "name": "LineSp",
             "text":"this is a short description",
             "size": 1732
           },
           {
-            "name": "RectSprite",
+            "name": "RectSpr",
             "text":"this is a short description",
             "size": 3623
           }
         ]
       },
       {
-        "name": "flex",
+        "name": "B",
         "text":"this is a short description",
         "children": [
           {
@@ -42,7 +42,7 @@
         ]
       },
       {
-        "name": "physics",
+        "name": "C",
         "text":"this is a short description",
         "children": [
           {
@@ -51,7 +51,7 @@
             "size": 1082
           },
           {
-            "name": "GravityForce",
+            "name": "Gravity",
             "text":"this is a short description",
             "size": 1336
           },
@@ -63,28 +63,28 @@
         ]
       },
       {
-        "name": "display",
+        "name": "D",
         "text":"this is a short description",
         "children": [
           {
-            "name": "DirtySprite",
+            "name": "Dirty",
             "text":"this is a short description",
             "size": 8833
           },
           {
-            "name": "LineSprite",
+            "name": "Line",
             "text":"this is a short description",
             "size": 1732
           },
           {
-            "name": "RectSprite",
+            "name": "Rect",
             "text":"this is a short description",
             "size": 3623
           }
         ]
       },
       {
-        "name": "flex",
+        "name": "E",
         "text":"this is a short description",
         "children": [
           {
@@ -103,16 +103,16 @@
         ]
       },
       {
-        "name": "physicsII",
+        "name": "F",
         "text":"this is a short description",
         "children": [
           {
-            "name": "DragForce",
+            "name": "Force",
             "text":"this is a short description",
             "size": 1082
           },
           {
-            "name": "GravityForce",
+            "name": "Gravity",
             "text":"this is a short description",
             "size": 1336
           },

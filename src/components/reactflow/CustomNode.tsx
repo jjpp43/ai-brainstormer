@@ -31,15 +31,22 @@ const CustomNode = ({ data }: any) => {
       />
       {/* Node content */}
       <div className="flex flex-col">
-        <input defaultValue={data.label} className="text-xl font-semibold" />
-        <textarea
-          ref={textAreaRef}
-          defaultValue={data.text}
-          className="text-lg w-full resize-none overflow-hidden"
-          style={{ minHeight: "1.5em" }} // Ensure single line initially
-          onInput={(e) => autoResize(e.currentTarget)}
-          rows={1} // Starts with one line
-        />
+        {isRoot ? (
+          <input defaultValue={data.label} className="text-2xl font-semibold" />
+        ) : (
+          <input defaultValue={data.label} className="text-xl font-semibold" />
+        )}
+
+        {!isRoot && (
+          <textarea
+            ref={textAreaRef}
+            defaultValue={data.text}
+            className="text-lg w-full resize-none overflow-hidden"
+            style={{ minHeight: "1.5em" }} // Ensure single line initially
+            onInput={(e) => autoResize(e.currentTarget)}
+            rows={1} // Starts with one line
+          />
+        )}
       </div>
 
       {/* Source handles (where connections go out) */}
