@@ -13,9 +13,17 @@ import ReactFlow, {
   useReactFlow,
   ControlButton,
 } from "reactflow";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useUser } from "@clerk/nextjs"; // Import Clerk's user hook
 import "reactflow/dist/style.css";
+
 import { Button } from "../ui/button";
-import { ZoomIn, ZoomOut, ArrowDownToLine, ArrowDown } from "lucide-react";
+import { ZoomIn, ZoomOut, ArrowDownToLine } from "lucide-react";
 import CustomNode from "./CustomNode"; // Adjust path if needed
 import BrainstormPrompt from "../BrainstormPrompt";
 import * as htmlToImage from "html-to-image";
@@ -39,7 +47,7 @@ const nodeTypes = {
   custom: CustomNode,
 };
 
-// ------------------ Main TreeChart ------------------
+// -------------- Utility: Download PNG --------------
 const downloadPNG = async () => {
   const reactFlowWrapper = document.querySelector(
     ".react-flow__viewport"
@@ -57,17 +65,18 @@ const downloadPNG = async () => {
   }
 };
 
+// ------------------ Main TreeChart ------------------
 const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
   const nodeIdSet = new Set<string>(); // Track created node IDs
   const strokeColors = [
-    "#FF0072", // Pink
-    "#00BFFF", // Deep Sky Blue
-    "#32CD32", // Lime Green
-    "#FFA500", // Orange
-    "#8A2BE2", // Blue Violet
-    "#4262FF", // Orange Red
+    "#ED1B24",
+    "#FE5E20",
+    "#FFB200",
+    "#0898F9",
+    "#4B40FE",
+    "#CB0DD9",
   ];
   let idCounter = 0; // Unique incremental ID
 
@@ -90,6 +99,7 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
       const parentIndex = Math.floor(idCounter / 4);
       strokeColor = strokeColors[parentIndex];
     }
+
     if (!nodeIdSet.has(nodeId)) {
       nodeIdSet.add(nodeId);
       newNodes.push({
@@ -122,7 +132,6 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
         },
       });
     }
-
     //Debugging
     console.log(
       "ParentID: ",
@@ -135,8 +144,8 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
 
     if (node.children) {
       const totalChildren = node.children.length;
-      const verticalSpacing = depth === 0 ? 320 : 100;
-      const horizontalSpacing = depth === 0 ? 400 : 320;
+      const verticalSpacing = depth === 0 ? 360 : 120;
+      const horizontalSpacing = depth === 0 ? 400 : 360;
 
       node.children.forEach((child, idx) => {
         let childX = x;
@@ -167,12 +176,10 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
           nodeId,
           strokeColor
         );
-
         newNodes.push(...childNodes);
         newEdges.push(...childEdges);
       });
     }
-
     return { nodes: newNodes, edges: newEdges };
   };
 
@@ -181,7 +188,6 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
     if (!data) return;
     nodeIdSet.clear();
     idCounter = 0;
-
     // Start root node at center position (0,0)
     const { nodes: flowNodes, edges: flowEdges } = convertToFlow(data, 0, 0);
 
@@ -195,7 +201,7 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
   );
 
   return (
-    <div className="relative w-full h-full border rounded-lg bg-white">
+    <div className="relative w-full h-full bg-slate-50">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -204,7 +210,7 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         snapToGrid={true} // Enable snapping
-        snapGrid={[20, 20]}
+        snapGrid={[10, 10]}
         fitView
       >
         <MiniMap />
@@ -213,32 +219,17 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
           aria-label="React Flow Control Panel"
           showZoom={true}
           showInteractive={false}
+          showFitView={true}
         >
           <ControlButton>
-            <ArrowDownToLine strokeWidth={2.5} />
+            <ArrowDownToLine strokeWidth={2.5} onClick={downloadPNG} />{" "}
           </ControlButton>
         </Controls>
-
         <Background size={1} />
       </ReactFlow>
 
-      <div className="absolute top-2 left-4 flex space-x-2">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 flex space-x-2">
         <BrainstormPrompt onGenerate={onGenerate} ideas={ideas} />
-      </div>
-
-      <div className="absolute top-2 right-2 flex space-x-2">
-        <Button>
-          <ZoomIn />
-        </Button>
-        <Button onClick={() => console.log("Zoom Out")}>
-          <ZoomOut />
-        </Button>
-      </div>
-
-      <div className="absolute bottom-2 right-2 flex space-x-2">
-        <Button onClick={downloadPNG}>
-          JPG <ArrowDownToLine />
-        </Button>
       </div>
     </div>
   );

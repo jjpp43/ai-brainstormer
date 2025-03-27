@@ -8,6 +8,8 @@ import WordCloud from "@/components/wordCloud";
 import TreeChartReactFlow from "@/components/reactflow/TreeChartReactFlow";
 import data from "../../../public/flare.json";
 import BrainstormPrompt from "@/components/BrainstormPrompt";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ReactFlowProvider, useReactFlow } from "reactflow";
 
 export default function BrainstormingPage() {
   const [topic, setTopic] = useState("");
@@ -24,12 +26,17 @@ export default function BrainstormingPage() {
     const data = await res.json();
     setIdeas(data.ideas);
   };
+  // const { fitView } = useReactFlow(); // Access fitView function
 
+  // const handleSidebarClick = () => {
+  //   fitView(); // Directly call fitView() when sidebar is clicked
+  // };
   return (
-    <div>
-      <div className="py-4 w-full h-screen">
+    <div className="relative w-full h-screen">
+      <SidebarTrigger className="absolute left-0 top-0 z-10" />
+      <div className="flex flex-col w-full h-screen">
         {/* BrainStorming Visual Canvas */}
-        <div className="rounded-lg overflow-hidden w-[1280px] h-full">
+        <div className="overflow-hidden h-full">
           <TreeChartReactFlow
             data={data}
             onGenerate={handleGenerate}

@@ -4,8 +4,17 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from "@google/generative-ai";
+import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const MAX_REQUESTS = 10;
+const TIMEZONE_OFFSET = -4; // EDT offset from UTC
+
+const getMidnightTimestamp = () => {
+  const now = new Date();
+  now.setUTCHours(24 + TIMEZONE_OFFSET, 0, 0, 0); // Next midnight EDT
+  return now.getTime();
+};
 
 if (!GEMINI_API_KEY) {
   throw new Error("❌ Missing API_KEY in environment variables.");
@@ -13,6 +22,10 @@ if (!GEMINI_API_KEY) {
 
 export async function POST(req: NextRequest) {
   try {
+    //Clerk - Start
+    const user = await currentUser();
+    const { token, userId } = await req.json();
+    //Clerk - End
     const { topic, type } = await req.json();
     if (!topic) {
       console.error("No user input received.");

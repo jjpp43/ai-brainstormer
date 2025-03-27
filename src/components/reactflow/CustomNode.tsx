@@ -4,9 +4,9 @@ import { Handle, Position } from "reactflow";
 const CustomNode = ({ data }: any) => {
   const isLeftNode = data.positionType === "left";
   const isRoot = data.isRoot;
-  const colorClass = data.strokeColor || "black";
+  const colorClass = isRoot ? "#00D63D" : data.strokeColor || "black"; // Slate-500
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  // Function to auto-resize textarea
+
   const autoResize = (element: HTMLTextAreaElement | null) => {
     if (element) {
       element.style.height = "auto"; // Reset height to recalculate
@@ -21,34 +21,32 @@ const CustomNode = ({ data }: any) => {
   return (
     <div
       style={{ borderColor: colorClass }}
-      className="h-fit bg-white border-2 rounded-lg shadow-md px-4 py-2 min-w-[120px] text-center relative"
+      className="h-fit bg-gray-50 border-2 rounded-lg shadow-md px-4 py-2 min-w-[120px] text-center relative"
     >
       {/* Target handle (where connections come in) */}
       <Handle
         type="target"
         position={isLeftNode ? Position.Right : Position.Left}
-        style={{ background: "#555", width: 0, height: 0 }}
+        style={{ background: colorClass, width: 8, height: 8 }}
       />
       {/* Node content */}
+
       <div className="flex flex-col">
-        {isRoot ? (
-          <input defaultValue={data.label} className="text-2xl font-semibold" />
-        ) : (
-          <input defaultValue={data.label} className="text-xl font-semibold" />
-        )}
-
-        {!isRoot && (
-          <textarea
-            ref={textAreaRef}
-            defaultValue={data.text}
-            className="text-lg w-full resize-none overflow-hidden"
-            style={{ minHeight: "1.5em" }} // Ensure single line initially
-            onInput={(e) => autoResize(e.currentTarget)}
-            rows={1} // Starts with one line
-          />
-        )}
+        <input
+          defaultValue={data.label}
+          className={`w-full text-xl font-semibold ${
+            isRoot ? "uppercase" : ""
+          }`}
+        />
+        <textarea
+          ref={textAreaRef}
+          defaultValue={data.text}
+          className="pt-1 text-lg w-full resize-none overflow-hidden"
+          style={{ minHeight: "1.5em", lineHeight: "1.3" }} // Ensure single line initially
+          onInput={(e) => autoResize(e.currentTarget)}
+          rows={1} // Starts with one line
+        />
       </div>
-
       {/* Source handles (where connections go out) */}
       {isRoot ? (
         <>
@@ -56,20 +54,24 @@ const CustomNode = ({ data }: any) => {
             id="left" // Add ID for left handle
             type="source"
             position={Position.Left}
-            style={{ background: "#555", width: 0, height: 0 }}
+            style={{ background: colorClass, width: 8, height: 8 }}
           />
           <Handle
             id="right" // Add ID for right handle
             type="source"
             position={Position.Right}
-            style={{ background: "#555", width: 0, height: 0 }}
+            style={{ background: colorClass, width: 8, height: 8 }}
           />
         </>
       ) : (
         <Handle
           type="source"
           position={isLeftNode ? Position.Left : Position.Right}
-          style={{ background: "#555", width: 0, height: 0 }}
+          style={{
+            background: colorClass,
+            width: 8,
+            height: 8,
+          }}
         />
       )}
     </div>

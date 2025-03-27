@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { InputWithButton } from "@/components/inputWithButton";
+import { Card } from "./ui/card";
 
 interface BrainstormPromptProps {
   onGenerate: (input: string) => void;
@@ -13,13 +14,13 @@ const BrainstormPrompt: React.FC<BrainstormPromptProps> = ({
   ideas,
 }) => {
   return (
-    <div className="w-full flex flex-col items-start">
-      <h1 className="text-xl font-semibold p-1">Brainstorm Prompt</h1>
+    <Card className="p-4 gap-3 bg-slate-100">
+      {/* <h1 className="text-xl font-semibold">Brainstorm Prompt</h1> */}
       <div className="w-96">
         <InputWithButton onGenerate={onGenerate} />
-        {ideas && <p className="mt-4 bg-gray-100 p-4  break-words">{ideas}</p>}
+        {ideas && <p className="mt-4 bg-gray-100 p-4 break-words">{ideas}</p>}
       </div>
-    </div>
+    </Card>
   );
 };
 

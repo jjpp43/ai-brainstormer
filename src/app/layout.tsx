@@ -5,6 +5,9 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import DockWrapper from "../components/dockWrapper";
 import { ClerkProvider } from "@clerk/nextjs";
+import ClickSpark from "../../reactbits/ClickSpark/ClickSpark";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { ReactFlowProvider } from "reactflow";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -28,10 +31,9 @@ export default function RootLayout({
         <head>
           <link rel="icon" href="/icon.ico" sizes="any" />
         </head>
-        <body className={`antialiased`}>
+        <body className={`antialiased relative`}>
           <SidebarProvider>
             <AppSidebar />
-            <SidebarTrigger className="h-10 w-10" />
             <main className=" flex w-full items-center justify-center">
               {children}
               {/* <DockWrapper /> */}

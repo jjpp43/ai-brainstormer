@@ -1,6 +1,6 @@
 //Import icons
 "use client";
-
+import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { LayoutGrid, Home, Brain, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import LogoSVG from "./Logo";
 import { Button } from "./ui/button";
@@ -41,6 +43,7 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const [collapsed, setCollapsed] = useState(true);
   const pathname = usePathname(); // Get current path
   const { user, isLoaded, isSignedIn } = useUser();
   return (
@@ -49,6 +52,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <div className="flex flex-col items-center pt-4">
             <LogoSVG size={64} />
+
             <div className="font-bold text-slate-800">MindMap AI</div>
           </div>
           <SidebarGroupLabel className=""></SidebarGroupLabel>
