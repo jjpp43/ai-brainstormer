@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Exo_2, Archivo } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import DockWrapper from "../components/dockWrapper";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { ReactFlowProvider } from "reactflow";
