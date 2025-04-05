@@ -27,7 +27,7 @@ export default function SwotAnalysisPage() {
     <div className="relative w-full h-screen">
       <SidebarTrigger className="absolute left-0 top-0 z-10" />
       <div className="flex flex-col w-full h-screen p-4">
-        <div className="flex flex-col h-full items-center">
+        <div className="flex flex-col h-full items-center ">
           {/* SWOT Analysis Prompt */}
           <SwotPrompt
             onGenerate={function (input: string): void {
@@ -43,10 +43,10 @@ export default function SwotAnalysisPage() {
             />
           </div> */}
           {/* Grid Outline */}
-          <div className="relative flex flex-col w-full items-center gap-2 py-4">
+          <div className="relative flex flex-col w-full items-center gap-2 py-8">
             <div className=" flex flex-row justify-center w-full h-full gap-2">
               {/* 1. Strength Container */}
-              <div className="relative w-2/5 h-72 border-2 border-slate-800 rounded-xl inverted-corner">
+              <div className="relative w-2/5 h-72 border-2 border-gray-800 rounded-xl inverted-corner">
                 <h1 className="absolute px-2 -top-6 left-8 bg-white font-semibold text-3xl text-yellow-500 tracking-widest">
                   Strength
                 </h1>
@@ -65,7 +65,7 @@ export default function SwotAnalysisPage() {
                 </div>
               </div>
               {/* 2. Weakness Container */}
-              <div className="relative w-2/5 h-72 border-2 border-slate-800 rounded-xl">
+              <div className="relative w-2/5 h-72 border-2 border-gray-800 rounded-xl">
                 <h1 className="absolute px-2 -top-6 right-8 bg-white font-semibold text-3xl text-orange-500 tracking-widest">
                   Weakness
                 </h1>
@@ -81,7 +81,7 @@ export default function SwotAnalysisPage() {
             </div>
             <div className="flex flex-row justify-center w-full h-full gap-2">
               {/* 3. Opportunity Container */}
-              <div className="relative w-2/5 h-72 border-2 border-slate-800 rounded-xl">
+              <div className="relative w-2/5 h-72 border-2 border-gray-800 rounded-xl">
                 <h1 className="absolute px-2 -bottom-6 left-8 bg-white font-semibold text-3xl text-green-600 tracking-widest">
                   Opportunity
                 </h1>
@@ -95,7 +95,7 @@ export default function SwotAnalysisPage() {
                 </div>
               </div>
               {/* 4. Threat Container */}
-              <div className="relative w-2/5 h-72 border-2 border-slate-800 rounded-xl">
+              <div className="relative w-2/5 h-72 border-2 border-gray-800 rounded-xl">
                 <h1 className="absolute px-2 -bottom-6 right-8 bg-white font-semibold text-3xl text-blue-600 tracking-widest">
                   Threat
                 </h1>

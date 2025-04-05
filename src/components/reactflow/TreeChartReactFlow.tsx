@@ -11,6 +11,7 @@ import ReactFlow, {
   Node,
   Edge,
   useReactFlow,
+  FitView,
   ControlButton,
 } from "reactflow";
 import {
@@ -19,7 +20,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useUser } from "@clerk/nextjs"; // Import Clerk's user hook
 import "reactflow/dist/style.css";
 
 import { Button } from "../ui/button";
@@ -32,8 +32,8 @@ import { Arrow } from "@radix-ui/react-tooltip";
 // -------------------- Types --------------------
 
 interface TreeNode {
-  name: string;
-  text?: string;
+  title: string;
+  description?: string;
   children?: TreeNode[];
 }
 
@@ -71,12 +71,12 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
   const nodeIdSet = new Set<string>(); // Track created node IDs
   const strokeColors = [
-    "#ED1B24",
-    "#FE5E20",
-    "#FFB200",
-    "#0898F9",
-    "#4B40FE",
-    "#CB0DD9",
+    "#FF9D46",
+    "#FFC639",
+    "#FE668C",
+    "#42D1B5",
+    "#40D4E2",
+    "#41A3E0",
   ];
   let idCounter = 0; // Unique incremental ID
 
@@ -106,8 +106,8 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
         id: nodeId,
         type: "custom",
         data: {
-          label: node.name,
-          text: node.text,
+          title: node.title,
+          description: node.description,
           positionType: x < 0 ? "left" : "right", // Add position type
           strokeColor,
           isRoot,
@@ -132,15 +132,6 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
         },
       });
     }
-    //Debugging
-    console.log(
-      "ParentID: ",
-      parentId,
-      "NodeID: ",
-      idCounter,
-      "Title: ",
-      node.name
-    );
 
     if (node.children) {
       const totalChildren = node.children.length;
@@ -183,17 +174,24 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
     return { nodes: newNodes, edges: newEdges };
   };
 
+  const { fitView } = useReactFlow();
   // Update the initial call in useEffect
   useEffect(() => {
     if (!data) return;
     nodeIdSet.clear();
     idCounter = 0;
+    console.log(ideas);
     // Start root node at center position (0,0)
     const { nodes: flowNodes, edges: flowEdges } = convertToFlow(data, 0, 0);
 
     setNodes(flowNodes);
     setEdges(flowEdges);
-  }, [data, setNodes, setEdges]);
+
+    // Automatically fit and zoom out when everything is loaded
+    setTimeout(() => {
+      fitView({ padding: 0.3, duration: 500 }); // Adjust padding for more space
+    }, 100);
+  }, [ideas, setNodes, setEdges, fitView]);
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
@@ -201,7 +199,7 @@ const TreeChart: React.FC<TreeChartProps> = ({ data, onGenerate, ideas }) => {
   );
 
   return (
-    <div className="relative w-full h-full bg-slate-50">
+    <div className="relative w-full h-full bg-gray-50">
       <ReactFlow
         nodes={nodes}
         edges={edges}

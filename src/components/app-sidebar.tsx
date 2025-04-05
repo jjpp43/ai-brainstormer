@@ -48,12 +48,12 @@ export function AppSidebar() {
   const { user, isLoaded, isSignedIn } = useUser();
   return (
     <Sidebar>
-      <SidebarContent className="bg-slate-100">
+      <SidebarContent className="bg-gray-150">
         <SidebarGroup>
           <div className="flex flex-col items-center pt-4">
             <LogoSVG size={64} />
 
-            <div className="font-bold text-slate-800">MindMap AI</div>
+            <div className="font-bold text-gray-800">MindMap AI</div>
           </div>
           <SidebarGroupLabel className=""></SidebarGroupLabel>
           <SidebarGroupContent>
@@ -67,14 +67,14 @@ export function AppSidebar() {
                         <item.icon
                           strokeWidth={isActive ? 3 : 2}
                           className={
-                            isActive ? "text-slate-700" : "text-slate-500"
+                            isActive ? "text-gray-700" : "text-gray-500"
                           }
                         />
                         <span
                           className={
                             isActive
-                              ? "font-bold text-slate-700"
-                              : "font-medium text-slate-500"
+                              ? "font-bold text-gray-700"
+                              : "font-medium text-gray-500"
                           }
                         >
                           {item.title}
@@ -89,7 +89,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="flex flex-col px-4 py-16 bg-slate-100">
+      <SidebarFooter className="flex flex-col px-4 py-16 bg-gray-150">
         <SignedOut>
           <SignInButton mode="modal">
             <Button className="border-t-1">Sign in or up</Button>
@@ -99,7 +99,7 @@ export function AppSidebar() {
           <div className="flex flex-row gap-4 items-center border-t-2 pt-4">
             <UserButton afterSignOutUrl="/" />
             {isLoaded && user && (
-              <span className="font-medium text-slate-800">
+              <span className="font-medium text-gray-800">
                 {user.firstName}
               </span>
             )}

@@ -12,8 +12,8 @@ interface SwotPromptProps {
 const SwotPrompt: React.FC<SwotPromptProps> = ({ onGenerate, ideas }) => {
   return (
     <div>
-      <h1 className="text-4xl font-semibold p-2 mb-4">SWOT Analysis</h1>
-      <Card className="p-4 gap-3 bg-slate-100">
+      <h1 className="text-4xl font-semibold p-2 mb-2">SWOT Analysis</h1>
+      <Card className="p-2 gap-3 bg-gray-100">
         {/* <h1 className="text-xl font-semibold">Swot Prompt</h1> */}
 
         <div className="w-96">
@@ -21,7 +21,9 @@ const SwotPrompt: React.FC<SwotPromptProps> = ({ onGenerate, ideas }) => {
             onGenerate={onGenerate}
             placeholder="Give me a description of the company"
           />
-          {ideas && <p className="mt-4 bg-gray-100 p-4 break-words">{ideas}</p>}
+          <div className="text-xs pt-1 px-1 text-gray-500">
+            Copy & Paste your company's information!
+          </div>
         </div>
       </Card>
     </div>

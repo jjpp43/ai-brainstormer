@@ -27,7 +27,7 @@ export function InputWithButton({
     setError(null);
 
     try {
-      const response = await fetch("/api/tokens/deduct", {
+      const response = await fetch("/api/tokens/", {
         method: "POST",
       });
 

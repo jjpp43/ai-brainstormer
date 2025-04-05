@@ -14,7 +14,7 @@ import Link from "next/link";
 export default function CardBrainstorming() {
   return (
     <Card
-      className="h-fit w-72 bg-slate-50"
+      className="h-fit w-72 bg-gray-50"
       aria-label="Brainstorming Visualizer Card"
     >
       <CardHeader>

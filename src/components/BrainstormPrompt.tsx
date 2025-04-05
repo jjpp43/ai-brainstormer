@@ -14,11 +14,13 @@ const BrainstormPrompt: React.FC<BrainstormPromptProps> = ({
   ideas,
 }) => {
   return (
-    <Card className="p-4 gap-3 bg-slate-100">
+    <Card className="p-2 gap-3 bg-slate-100">
       {/* <h1 className="text-xl font-semibold">Brainstorm Prompt</h1> */}
       <div className="w-96">
         <InputWithButton onGenerate={onGenerate} />
-        {ideas && <p className="mt-4 bg-gray-100 p-4 break-words">{ideas}</p>}
+        <div className="text-xs pt-1 px-1 text-gray-500">
+          ex) sports, health, business, etc
+        </div>
       </div>
     </Card>
   );

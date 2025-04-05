@@ -4,7 +4,7 @@ import { Handle, Position } from "reactflow";
 const CustomNode = ({ data }: any) => {
   const isLeftNode = data.positionType === "left";
   const isRoot = data.isRoot;
-  const colorClass = isRoot ? "#00D63D" : data.strokeColor || "black"; // Slate-500
+  const colorClass = isRoot ? "#646464" : data.strokeColor || "black";
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const autoResize = (element: HTMLTextAreaElement | null) => {
@@ -33,14 +33,14 @@ const CustomNode = ({ data }: any) => {
 
       <div className="flex flex-col">
         <input
-          defaultValue={data.label}
+          defaultValue={data.title}
           className={`w-full text-xl font-semibold ${
             isRoot ? "uppercase" : ""
           }`}
         />
         <textarea
           ref={textAreaRef}
-          defaultValue={data.text}
+          defaultValue={data.description}
           className="pt-1 text-lg w-full resize-none overflow-hidden"
           style={{ minHeight: "1.5em", lineHeight: "1.3" }} // Ensure single line initially
           onInput={(e) => autoResize(e.currentTarget)}
